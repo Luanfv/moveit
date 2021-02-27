@@ -66,6 +66,7 @@
   font-weight: 600;
   font-size: 2rem;
   color: var(--title);
+  margin-top: 1rem;
 }
 
 .challengeActive p {

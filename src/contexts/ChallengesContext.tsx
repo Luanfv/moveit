@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useCallback, useMemo, useState } from 'react';
+import { createContext, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import challenges from '../../challenges.json';
 
 interface ChallengesProviderProps {
@@ -34,6 +34,10 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
 
   const experienceToNextLevel = useMemo(() => Math.pow((level + 1) * 4, 2), [level]);
 
+  useEffect(() => {
+    Notification.requestPermission();
+  }, []);
+
   const levelUp = useCallback(() => {
     setLevel(level + 1);
   }, [level]);
@@ -43,6 +47,14 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
     const challenge = challenges[randomChallengeIndex];
 
     setActiveChallenge(challenge);
+
+    new Audio('./notification.mp3').play();
+
+    if (Notification.permission === 'granted') {
+      new Notification('Novo desafio!', {
+        body: `Valendo ${challenge.amount}xp`,
+      });
+    }
   }, []);
 
   const resetChallenge = useCallback(() => {
